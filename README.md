@@ -1,6 +1,7 @@
 # grunt-text-include
 
 > The best grunt plugin ever.
+
 Include simple text resources such as HTML snippets as strings in your project. I use Handlebars and grunt-contrib-handlebars for my templates, but for parameterless templates you can use this. Read a folder of HTML files and this plugin will output a .js file which contains an object with filenames as keys and contents as values.
 
 ## Getting Started
@@ -87,7 +88,7 @@ In this example, the default options are used to import two text files. So if th
 
 ```js
 grunt.initConfig({
-  init_gruntplugin_sample: {
+  text_include: {
     options: {},
     files: {
       'dest/default_templates.js': ['src/testing', 'src/123'],
