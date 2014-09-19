@@ -27,7 +27,7 @@ module.exports = function (grunt) {
             footer: ''
         });
 
-        var thisTemplate = options.header + 'this["' + options.namespace + '"]';
+        var thisTemplate = 'this["' + options.namespace + '"]';
 
         // Iterate over all specified file groups.
         this.files.forEach(function (f) {
@@ -49,10 +49,10 @@ module.exports = function (grunt) {
                     grunt.log.writeln('Including text file "' + filepath + '" as ' + options.namespace + '["' + name + '"]');
 
                     return thisTemplate + '[\'' + name + '\']="' + content + '"';
-                }).join(';') + ';' + options.footer;
+                }).join(';');
 
             // Write the destination file.
-            grunt.file.write(f.dest, src);
+            grunt.file.write(f.dest, options.header + src + ';' + options.footer);
 
             // Print a success message.
             grunt.log.writeln('File "' + f.dest + '" created.');
