@@ -80,7 +80,7 @@ Default value: identity
 
 A function which takes the file content and returns it.
 
-#### header
+#### options.header
 Type: `String`
 Default value: ``
 
