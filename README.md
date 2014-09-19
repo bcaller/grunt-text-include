@@ -74,6 +74,24 @@ Default value: identity
 
 A function which takes the filename and returns the key this file should have.
 
+#### options.processContent
+Type: `Function {String -> String}`
+Default value: identity
+
+A function which takes the file content and returns it.
+
+#### header
+Type: `String`
+Default value: ``
+
+Text to include before the object.
+
+#### options.footer
+Type: `String`
+Default value: ``
+
+Text to include after the object.
+
 ### Usage Examples
 
 #### Default Options
@@ -128,6 +146,44 @@ grunt.initConfig({
 })
 ```
 >See the tests for further examples
+
+#### Header And Footer Options
+In this example we will wrap the object with an AMD define. For example, wrap the following object.
+
+```js
+{
+    'src/testing.html': 'Testing',
+    'src/123': '1 2 3'
+}
+```
+resulting roughly in the equivalent JS file
+
+```js
+define([], function () {
+    this.Templates = {
+        'src/testing.html': 'Testing',
+        'src/123': '1 2 3'
+    };
+
+    return this.Templates;
+});
+```
+using the following config settings
+
+```js
+grunt.initConfig({
+  text_include: {
+    options: {
+        header: "define([], function () {\n",
+        footer: "\nreturn this.Templates;\n});"
+    },
+    files: {
+      'dest/templates.js': ['app/templates/*.html'],
+    },
+  },
+})
+
+```
 
 ## Contributing
 In lieu of a formal styleguide, take care to maintain the existing coding style. Add unit tests for any new or changed functionality. Lint and test your code using [grunt][].

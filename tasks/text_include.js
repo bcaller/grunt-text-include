@@ -22,10 +22,12 @@ module.exports = function (grunt) {
         var options = this.options({
             namespace: 'Templates',
             processContent: identity,
-            processName: identity
+            processName: identity,
+            header: '',
+            footer: ''
         });
 
-        var thisTemplate = 'this["'+options.namespace+'"]';
+        var thisTemplate = options.header + 'this["' + options.namespace + '"]';
 
         // Iterate over all specified file groups.
         this.files.forEach(function (f) {
@@ -47,7 +49,7 @@ module.exports = function (grunt) {
                     grunt.log.writeln('Including text file "' + filepath + '" as ' + options.namespace + '["' + name + '"]');
 
                     return thisTemplate + '[\'' + name + '\']="' + content + '"';
-                }).join(';');
+                }).join(';') + ';' + options.footer;
 
             // Write the destination file.
             grunt.file.write(f.dest, src);
