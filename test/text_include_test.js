@@ -22,8 +22,8 @@ var grunt = require('grunt');
     test.ifError(value)
 */
 var vm = require('vm'), path = require('path');
-function getOutput(filename, sandbox) {
-    var script = vm.createScript(grunt.file.read(filename));
+function getOutput(filename, sandbox, scriptSource) {
+    var script = vm.createScript(scriptSource || grunt.file.read(filename));
     var ctx = vm.createContext(sandbox || {});
     script.runInContext(ctx, path.basename(filename));
     return ctx;
@@ -117,6 +117,57 @@ exports.text_include = {
             }
         };
         test.deepEqual(actual, expected, 'should process content according to custom function');
+
+        test.done();
+    },
+
+    header_footer_AMD: function(test) {
+        test.expect(1);
+
+        //Add this code to the start of the file when we run it so that define is defined
+        var testHarness = 'function define(a, b){return b};this.result=' + grunt.file.read('tmp/header_footer_AMD');
+        var actual = getOutput(null, null, testHarness);
+        var expected = {
+            'test/fixtures/1.2.3': fileContents.one,
+            'test/fixtures/testing': fileContents.testing,
+            'test/fixtures/With whitespace': fileContents.ww
+        };
+        //run the function passed in to define()
+        test.deepEqual(actual.result(), expected, 'should surround with AMD header and footer');
+
+        test.done();
+    },
+
+    header_only: function(test) {
+        test.expect(1);
+
+        var actual = getOutput('tmp/header_only');
+        var expected = {
+            Templates: {
+                'test/fixtures/1.2.3': fileContents.one,
+                'test/fixtures/testing': fileContents.testing,
+                'test/fixtures/With whitespace': fileContents.ww,
+                header: true
+            }
+        };
+        test.deepEqual(actual, expected, 'should put header at the top');
+
+        test.done();
+    },
+
+    footer_only: function(test) {
+        test.expect(1);
+
+        var actual = getOutput('tmp/footer_only');
+        var expected = {
+            Templates: {
+                'test/fixtures/1.2.3': fileContents.one,
+                'test/fixtures/testing': fileContents.testing,
+                'test/fixtures/With whitespace': fileContents.ww,
+                footer: 3
+            }
+        };
+        test.deepEqual(actual, expected, 'should put footer at the bottom');
 
         test.done();
     }

@@ -76,6 +76,31 @@ module.exports = function(grunt) {
         files: {
           'tmp/remove_excess_white': ['test/fixtures/*']
         }
+      },
+      header_footer_AMD: {
+        options: {
+          header: "define([], function () {\n",
+          footer: "\nreturn this.Templates;\n});"
+        },
+        files: {
+          'tmp/header_footer_AMD': ['test/fixtures/*']
+        }
+      },
+      header_only: {
+        options: {
+          header: "this.Templates={'header':true};"
+        },
+        files: {
+          'tmp/header_only': ['test/fixtures/*']
+        }
+      },
+      footer_only: {
+        options: {
+          footer: "this.Templates.footer=Object.keys(this.Templates).length"
+        },
+        files: {
+          'tmp/footer_only': ['test/fixtures/*']
+        }
       }
 
 
